@@ -1,0 +1,58 @@
+{
+  "name": "dynamicauth_capm",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap-cloud-sdk/http-client": "^3.20.0",
+    "@sap/cds": "^8.1.1",
+    "@sap/cds-hana": "^2",
+    "@sap/cds-odata-v2-adapter-proxy": "^1.9.21",
+    "@sap/xsenv": "^4.2.0",
+    "@sap/xssec": "^3",
+    "axios": "^1.6.6",
+    "cfenv": "^1.2.4",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "passport": "^0",
+    "path": "^0.12.7",
+    "sql": "^0.78.0",
+    "sqlite3": "^5.1.6"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "undeploy": "cf undeploy cap_servs --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "watch-test_app": "cds watch --open test_app/webapp/index.html?sap-ui-xx-viewCache=false"
+  },
+  "cds": {
+    "hana": {
+      "deploy-format": "hdbtable",
+      "syntax": "hdi"
+    },
+    "build": {
+      "tasks": [
+        {
+          "for": "hana",
+          "dest": "../db"
+        },
+        {
+          "for": "node-cf"
+        }
+      ]
+    },
+    "requires": {
+      "db": {
+        "kind": "sql"
+      }
+    }
+  },
+  "devDependencies": {
+    "@sap/cds-dk": "^7",
+    "@sap/ux-specification": "^1.120.6",
+    "rimraf": "^3.0.2"
+  }
+}
